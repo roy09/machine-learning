@@ -260,7 +260,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display a description of the dataset</span>
@@ -387,7 +387,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Select three indices of your choice you wish to sample from the dataset</span>
@@ -486,9 +486,9 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer:</strong> First one could be an average household who has average demand on all products. Regular spending on all products. Nothing really stands out.</p>
-<p>Judging by the high amount of spending in grocery, milk, frozen and detergents &amp; paper, 2nd is probably a retailer.</p>
-<p>3rd one seems like a resturant, whose primary demand would be fresh &amp; milk products.</p>
+<p><strong>Answer:</strong> First one could be an average household who has average demand on all products. Spending in most products is way below 25% spending bracket compared to other customers. Lower than mean in all the prodcuts.</p>
+<p>Judging by the high amount of spending in Grocery, Milk, Frozen and Detergents/Paper, 2nd is probably a retailer. Their spending in the all the products apart from Delicatessen is way over the median.</p>
+<p>3rd one seems like a resturant, whose primary demand would be fresh &amp; milk products. Spending on Fresh and Milk is way above the 75% of the distribution, which signifies it might be a niche customer type. Might act as an outlier.</p>
 
 </div>
 </div>
@@ -548,7 +548,7 @@ div#notebook {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>-0.425528231726
+<pre>-0.487232569192
 </pre>
 </div>
 </div>
@@ -2767,9 +2767,9 @@ oVAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFIoY5v8DZS+8M4oxFOkAAAAASUVORK5CYII=
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong> 
-There are couple of pairs that I think exhibits correlations. (Grocery, Detergents_Paper),(Fresh, Delicatessen), (Grocery, Milk), (Delicatessen, Fresh) are strongly correlated.</p>
-<p>Since we can see, (Fresh, Delicatessen) has a strong correlation and does not exhibit much correlation between others. So, it might be relelent to identify paritcular customer group.</p>
-<p>The data is not normally distributed. Most of the datapoints lie closely, while other points are just scattered throughout the area.</p>
+There are couple of pairs that I think exhibits correlations. (Grocery, Detergents_Paper),(Fresh, Delicatessen), (Grocery, Milk) are strongly correlated.</p>
+<p>Fresh doesn't really display much of a correlation between other products apart from Delicatessen. This explains the low R^2 score.</p>
+<p>The data is not normally distributed. In all of the cases, data is positively skewed. Most points lie in the long tail as in the positive direction/side.</p>
 
 </div>
 </div>
@@ -7857,6 +7857,7 @@ Once you have performed this implementation, the dataset will be stored in the v
     <span class="k">print</span> <span class="s2">&quot;Data points considered outliers for the feature &#39;{}&#39;:&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
     <span class="n">display</span><span class="p">(</span><span class="n">log_data</span><span class="p">[</span><span class="o">~</span><span class="p">((</span><span class="n">log_data</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">Q1</span> <span class="o">-</span> <span class="n">step</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">log_data</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">Q3</span> <span class="o">+</span> <span class="n">step</span><span class="p">))])</span>
     
+    
 <span class="c1"># OPTIONAL: Select the indices for data points you wish to remove</span>
 <span class="n">outliers</span>  <span class="o">=</span> <span class="p">[]</span>
 
@@ -8510,7 +8511,7 @@ Once you have performed this implementation, the dataset will be stored in the v
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>There are multiple points that are considered outliers for more han one feature.</p>
+<p>There are multiple points[65, 66, 75, 128, 154] that are considered outliers for more than one feature.</p>
 <p>I don't think these data points should be removed. Because they are working as outliers for multiple features, they might as well be indicators of small customer groups.</p>
 <p>No other points were added to the outliers list.</p>
 
@@ -9148,8 +9149,9 @@ First two principal components explain about 0.719 of the variance in the data. 
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>K-means is much simpler &amp; easier to calculate, specially if we already have a good estimation of number of clusters. However it is prone to local maxima.</p>
-<p>GMM starts with arbitary number of clusters and works down from there to find the clusters. Great for density estimation. Not prone to local maxima, but time &amp; computing consuming.</p>
+<p>K-means is much simpler &amp; easier to calculate, specially if we already have a good estimation of number of clusters. However it is prone to local maxima. It is faster and more scalable.</p>
+<p>GMM starts with arbitary number of clusters and works down from there to find the clusters. Great for density estimation. Not prone to local maxima, but time &amp; computing consuming since it works on using informations such as mean, variance, and the probability of the individual points belonging to different clusters.</p>
+<p>Assignment of clusters also vaires between K-Means and GMM. In K-Means it's hard assignement, which basically means when we assign a point to a cluster, we are absolutely commiting to it for that time(we might revert after another step or so). While for GMM, the algorithm can be 70% sure about the assignment and work there after to work on others.</p>
 <p>Since we alredy have a good estimation of possible clusters, we can simply go with K-Means</p>
 
 </div>
@@ -10788,7 +10790,7 @@ AABJRU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
@@ -10937,8 +10939,9 @@ Sample point 2 predicted to be in Cluster 0
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>I think we could the sum of the total products bought as another feature, which might be able to find the trend between the order difference of households and a grocery shop.</p>
-<p>As we have seen, we found two clusters in the data. We saw segment 0 is low volume and segment 1 in high volume. So, I think this total purchase volume can be a good indicating measure that can be used to feed the supervised algorithm.</p>
+<p>The clustered data that we have after running K-Means is something that we could use for each datapoints as a feature. So, it can be used to feed the Supervised Learning algorithm.</p>
+<p>Source: Forum</p>
+<p>Also I think we could the sum of the total products bought as another feature, which might be able to find the trend between the order difference of households and a grocery shop.</p>
 
 </div>
 </div>
