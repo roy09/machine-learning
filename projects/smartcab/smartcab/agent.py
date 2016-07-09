@@ -28,48 +28,43 @@ class LearningAgent(Agent):
         deadline = self.env.get_deadline(self)
 
         # TODO: Update state
-        self.state = (inputs.items(), self.get_next_waypoint())
+        self.state = tuple(inputs.items()) + tuple({'waypoint': self.next_waypoint}.items())
+        # print "HI THERE BABABAAAAAA", self.next_waypoint
 
         # TODO: Select action according to your policy
         actions = ["forward", 'right', 'left', None]
 
         # find the state in the table, if not initialize
         # if state found in table, select an action
-        print "HI", type(self.state), type(self.qTable)
+        # print "HI", type(self.state), type(self.qTable)
+        # print self.state, self.qTable
         if self.state in self.qTable:
+            # print "hi"
             # decide to explore or to exploit
             if random.random() < self.epsilon:
                 # take a random move
-                action = random.choices([actions])
-
+                action = random.choice(actions)
             else:
                 # take action from policy
-                possibleMoves = self.qTable[self.state]
-                action = max(possibleMoves, possibleMoves.get)
+                action = random.choice(self.defaultQuery(self.qTable[self.state]))
 
         # if state not found in table, then initialize and choose a random action
         else:
-            self.qTable[self.state] = {}
+            self.qTable[self.state] = {'left': 0.0, 'right': 0.0, 'forward': 0.0, None: 0.0}
             action = random.choice(actions)
 
         # Execute action and get reward
         reward = self.env.act(self, action)
 
         # TODO: Learn policy based on state, action, reward
-        self.qTable[self.state][action] += self.learningRate * (reward + self.discountFactor * () - self.qTable(self.state))
+        self.qTable[self.state][action] += self.learningRate * (reward - self.qTable[self.state][action])
 
         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
 
-    def defaultQuery(self, state, action):
-        value = 0
-        actions = ["forward", 'right', 'left', None]
-        for k in actions:
-            if k != action:
-                try:
-                    value += self.qTable[(state, action)]
-                except KeyError:
-                    pass
-        return value
+    def defaultQuery(self, mapping):
+        highest = max(mapping.values())
+        actions = [k for k, v in mapping.items() if v == highest]
+        return actions
 
 
 def run():

@@ -185,7 +185,9 @@ class Environment(object):
 
     def act(self, agent, action):
         assert agent in self.agent_states, "Unknown agent!"
+        # print ":(", action
         assert action in self.valid_actions, "Invalid action!"
+
 
         state = self.agent_states[agent]
         location = state['location']
