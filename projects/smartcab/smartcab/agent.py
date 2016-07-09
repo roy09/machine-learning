@@ -3,6 +3,7 @@ from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
 
+
 class LearningAgent(Agent):
     """An agent that learns to drive in the smartcab world."""
 
@@ -11,6 +12,10 @@ class LearningAgent(Agent):
         self.color = 'red'  # override color
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         # TODO: Initialize any additional variables here
+        self.qTable = {}
+        self.learningRate = .7
+        self.discountFactor = .4
+        self.epsilon = .25
 
     def reset(self, destination=None):
         self.planner.route_to(destination)
@@ -23,16 +28,48 @@ class LearningAgent(Agent):
         deadline = self.env.get_deadline(self)
 
         # TODO: Update state
-        
+        self.state = (inputs.items(), self.get_next_waypoint())
+
         # TODO: Select action according to your policy
-        action = None
+        actions = ["forward", 'right', 'left', None]
+
+        # find the state in the table, if not initialize
+        # if state found in table, select an action
+        print "HI", type(self.state), type(self.qTable)
+        if self.state in self.qTable:
+            # decide to explore or to exploit
+            if random.random() < self.epsilon:
+                # take a random move
+                action = random.choices([actions])
+
+            else:
+                # take action from policy
+                possibleMoves = self.qTable[self.state]
+                action = max(possibleMoves, possibleMoves.get)
+
+        # if state not found in table, then initialize and choose a random action
+        else:
+            self.qTable[self.state] = {}
+            action = random.choice(actions)
 
         # Execute action and get reward
         reward = self.env.act(self, action)
 
         # TODO: Learn policy based on state, action, reward
+        self.qTable[self.state][action] += self.learningRate * (reward + self.discountFactor * () - self.qTable(self.state))
 
         print "LearningAgent.update(): deadline = {}, inputs = {}, action = {}, reward = {}".format(deadline, inputs, action, reward)  # [debug]
+
+    def defaultQuery(self, state, action):
+        value = 0
+        actions = ["forward", 'right', 'left', None]
+        for k in actions:
+            if k != action:
+                try:
+                    value += self.qTable[(state, action)]
+                except KeyError:
+                    pass
+        return value
 
 
 def run():
