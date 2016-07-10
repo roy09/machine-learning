@@ -13,13 +13,15 @@ class LearningAgent(Agent):
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         # TODO: Initialize any additional variables here
         self.qTable = {}
-        self.learningRate = .7
-        self.discountFactor = .4
-        self.epsilon = .25
+        self.learningRate = 0.7
+        self.discountFactor = 0.4
+        self.epsilon = 0.35
 
     def reset(self, destination=None):
         self.planner.route_to(destination)
         # TODO: Prepare for a new trip; reset any variables here, if required
+        self.state = None
+        self.next_waypoint = None
 
     def update(self, t):
         # Gather inputs
@@ -44,6 +46,7 @@ class LearningAgent(Agent):
             if random.random() < self.epsilon:
                 # take a random move
                 action = random.choice(actions)
+                self.epsilon -= 0.01
             else:
                 # take action from policy
                 action = random.choice(self.defaultQuery(self.qTable[self.state]))
