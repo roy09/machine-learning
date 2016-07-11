@@ -13,9 +13,10 @@ class LearningAgent(Agent):
         self.planner = RoutePlanner(self.env, self)  # simple route planner to get next_waypoint
         # TODO: Initialize any additional variables here
         self.qTable = {}
-        self.learningRate = 0.7
+        self.learningRate = 1
         self.discountFactor = 0.4
         self.epsilon = 0.35
+        
 
     def reset(self, destination=None):
         self.planner.route_to(destination)
